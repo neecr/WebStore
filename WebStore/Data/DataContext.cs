@@ -15,15 +15,11 @@ namespace WebStore.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderProduct> OrderItems { get; set; }
-
         public DbSet<Product> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<OrderProduct>()
-                .HasOne(op => op.Product) // Указание связи один-к-одному с моделью Product
-                .WithMany(p => p.OrderProducts) // Указание обратной связи с моделью Product
-                .HasForeignKey(op => op.ProductId); // Указание внешнего ключа в модели Product
+            //TODO
         }
     }
 }

@@ -1,0 +1,62 @@
+Index: WebStore/Controllers/ProductController.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>using Microsoft.AspNetCore.Mvc;\r\nusing WebStore.Interfaces;\r\nusing WebStore.Models;\r\n\r\nnamespace WebStore.Controllers\r\n{\r\n    [Route(\"api/[controller]\")]\r\n    [ApiController]\r\n    public class ProductController : Controller\r\n    {\r\n        private readonly IProductRepo _productRepo;\r\n\r\n        public ProductController(IProductRepo productRepo)\r\n        {\r\n            _productRepo = productRepo;\r\n        }\r\n\r\n        [HttpGet]\r\n        [ProducesResponseType(200, Type = typeof(ICollection<Product>))]\r\n        public IActionResult GetProducts()\r\n        {\r\n            var products = _productRepo.GetProducts();\r\n            if (!ModelState.IsValid)\r\n            {\r\n                return BadRequest(ModelState);\r\n            }\r\n            return Ok(products);\r\n        }\r\n    }\r\n}\r\n
+===================================================================
+diff --git a/WebStore/Controllers/ProductController.cs b/WebStore/Controllers/ProductController.cs
+--- a/WebStore/Controllers/ProductController.cs	
++++ b/WebStore/Controllers/ProductController.cs	
+@@ -26,5 +26,17 @@
+             }
+             return Ok(products);
+         }
++        
++        [HttpGet]
++        [ProducesResponseType(200, Type = typeof(ICollection<Product>))]
++        public IActionResult GetProductsWithPrice(double minPrice, double maxPrice)
++        {
++            var products = _productRepo.GetProductsWithPrice(minPrice, maxPrice);
++            if (!ModelState.IsValid)
++            {
++                return BadRequest(ModelState);
++            }
++            return Ok(products);
++        }
+     }
+ }
+Index: WebStore/Repos/ProductRepo.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>using WebStore.Data;\r\nusing WebStore.Interfaces;\r\nusing WebStore.Models;\r\n\r\nnamespace WebStore.Repos\r\n{\r\n    public class ProductRepo : IProductRepo\r\n    {\r\n        private readonly DataContext _context;\r\n\r\n        public ProductRepo(DataContext context)\r\n        {\r\n            _context = context;\r\n        }\r\n\r\n        public ICollection<Product> GetProducts()\r\n        {\r\n            return _context.Products.OrderBy(p => p.ProductId).ToList();\r\n        }\r\n    }\r\n}\r\n
+===================================================================
+diff --git a/WebStore/Repos/ProductRepo.cs b/WebStore/Repos/ProductRepo.cs
+--- a/WebStore/Repos/ProductRepo.cs	
++++ b/WebStore/Repos/ProductRepo.cs	
+@@ -17,5 +17,11 @@
+         {
+             return _context.Products.OrderBy(p => p.ProductId).ToList();
+         }
++
++        public ICollection<Product> GetProductsWithPrice(double minPrice, double maxPrice)
++        {
++            return _context.Products.OrderBy(p => p.ProductId).
++                Where(p => p.Price >= minPrice && p.Price <= maxPrice).ToList();
++        }
+     }
+ }
+Index: WebStore/Interfaces/IProductRepo.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>using WebStore.Models;\r\n\r\nnamespace WebStore.Interfaces\r\n{\r\n    public interface IProductRepo\r\n    {\r\n        ICollection<Product> GetProducts();\r\n    }\r\n}\r\n
+===================================================================
+diff --git a/WebStore/Interfaces/IProductRepo.cs b/WebStore/Interfaces/IProductRepo.cs
+--- a/WebStore/Interfaces/IProductRepo.cs	
++++ b/WebStore/Interfaces/IProductRepo.cs	
+@@ -5,5 +5,7 @@
+     public interface IProductRepo
+     {
+         ICollection<Product> GetProducts();
++
++        ICollection<Product> GetProductsWithPrice(double minPrice, double maxPrice);
+     }
+ }

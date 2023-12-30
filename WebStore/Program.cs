@@ -12,7 +12,7 @@ namespace WebStore
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             builder.Services.AddControllers();
             builder.Services.AddTransient<Seed>();
             builder.Services.AddScoped<IProductRepo, ProductRepo>();
@@ -21,7 +21,8 @@ namespace WebStore
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
+                // options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
             var app = builder.Build();

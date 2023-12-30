@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebStore.Data;
+using WebStore.Interfaces;
+using WebStore.Repos;
 
 namespace WebStore
 {
@@ -13,7 +15,8 @@ namespace WebStore
 
             builder.Services.AddControllers();
             builder.Services.AddTransient<Seed>();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddScoped<IProductRepo, ProductRepo>();
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<DataContext>(options =>
@@ -24,19 +27,7 @@ namespace WebStore
             var app = builder.Build();
 
             if (args.Length == 1 && args[0].ToLower() == "seeddata")
-                SeedData(app);
-
-            void SeedData(IHost app)
-            {
-                var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-
-                using (var scope = scopedFactory.CreateScope())
-                {
-                    var service = scope.ServiceProvider.GetService<Seed>();
-                    service.SeedDataContext();
-                }
-            }
-
+                Seed.SeedData(app);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -46,12 +37,8 @@ namespace WebStore
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebStore.Interfaces;
 using WebStore.Models;
+using WebStore.Services.Interfaces;
 
 namespace WebStore.Controllers
 {
@@ -8,22 +8,18 @@ namespace WebStore.Controllers
     [ApiController]
     public class ProductController : Controller
     {
-        private readonly IProductRepo _productRepo;
+        private readonly IProductService _productService;
 
-        public ProductController(IProductRepo productRepo)
+        public ProductController(IProductService productService)
         {
-            _productRepo = productRepo;
+            _productService = productService;
         }
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(ICollection<Product>))]
         public IActionResult GetProducts()
         {
-            var products = _productRepo.GetProducts();
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            var products = _productService.GetProducts();
             return Ok(products);
         }
     }

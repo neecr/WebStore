@@ -1,8 +1,8 @@
 ﻿using WebStore.Models;
 
-namespace WebStore.Interfaces
+namespace WebStore.Repositories.Interfaces
 {
-    public interface IProductRepo
+    public interface IProductRepository
     {
         ICollection<Product> GetProducts();
     }

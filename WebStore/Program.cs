@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using WebStore.Data;
-using WebStore.Interfaces;
-using WebStore.Repos;
+using WebStore.Repositories.Implementations;
+using WebStore.Repositories.Interfaces;
+using WebStore.Services.Implementations;
+using WebStore.Services.Interfaces;
 
 namespace WebStore
 {
@@ -15,7 +17,8 @@ namespace WebStore
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             builder.Services.AddControllers();
             builder.Services.AddTransient<Seed>();
-            builder.Services.AddScoped<IProductRepo, ProductRepo>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<IProductService, ProductService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

@@ -1,14 +1,14 @@
 ﻿using WebStore.Data;
-using WebStore.Interfaces;
 using WebStore.Models;
+using WebStore.Repositories.Interfaces;
 
-namespace WebStore.Repos
+namespace WebStore.Repositories.Implementations
 {
-    public class ProductRepo : IProductRepo
+    public class ProductRepository : IProductRepository
     {
         private readonly DataContext _context;
 
-        public ProductRepo(DataContext context)
+        public ProductRepository(DataContext context)
         {
             _context = context;
         }

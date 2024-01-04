@@ -17,5 +17,10 @@ namespace WebStore.Services.Implementations
         {
             return _productRepository.GetProducts();
         }
+
+        public Product GetProductById(int productId)
+        {
+            return _productRepository.GetProductById(productId);
+        }
     }
 }

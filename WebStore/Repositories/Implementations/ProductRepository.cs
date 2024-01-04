@@ -17,5 +17,19 @@ namespace WebStore.Repositories.Implementations
         {
             return _context.Products.OrderBy(p => p.ProductId).ToList();
         }
+
+        public Product GetProductById(int productId)
+        {
+            return (from p in _context.Products
+                join c in _context.Categories on p.CategoryId equals c.CategoryId
+                where p.ProductId == productId
+                select new Product
+                {
+                    ProductId = p.ProductId,
+                    Name = p.Name,
+                    Price = p.Price,
+                    Category = c
+                }).FirstOrDefault()!;
+        }
     }
 }

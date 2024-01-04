@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using WebStore.Data;
+using WebStore.Repositories.Implementations;
+using WebStore.Repositories.Interfaces;
+using WebStore.Services.Implementations;
+using WebStore.Services.Interfaces;
 
 namespace WebStore
 {
@@ -10,33 +14,27 @@ namespace WebStore
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             builder.Services.AddControllers();
             builder.Services.AddTransient<Seed>();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
             });
 
             var app = builder.Build();
 
             if (args.Length == 1 && args[0].ToLower() == "seeddata")
-                SeedData(app);
-
-            void SeedData(IHost app)
-            {
-                var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-
-                using (var scope = scopedFactory.CreateScope())
-                {
-                    var service = scope.ServiceProvider.GetService<Seed>();
-                    service.SeedDataContext();
-                }
-            }
-
+                Seed.SeedData(app);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -46,12 +44,8 @@ namespace WebStore
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }

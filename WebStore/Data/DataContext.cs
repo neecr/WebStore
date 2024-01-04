@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebStore.Models;
 
-
 namespace WebStore.Data
 {
     public class DataContext : DbContext

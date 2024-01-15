@@ -4,7 +4,9 @@ namespace WebStore.Repositories.Interfaces
 {
     public interface IProductRepository
     {
-        ICollection<Product> GetProducts();
+        List<Product> GetProducts();
         Product GetProductById(int productId);
+        
+        void CreateProduct(Product product);
     }
 }

@@ -4,8 +4,8 @@ namespace WebStore.Repositories.Interfaces
 {
     public interface ICategoryRepository
     {
-        public ICollection<Product> GetProductsByCategory(string categoryName);
-        
-        public ICollection<Category> GetCategories();
+        public Category GetCategoryById(int caterogyId);   
+        public List<Product> GetProductsByCategory(string categoryName);
+        public List<Category> GetCategories();
     }
 }

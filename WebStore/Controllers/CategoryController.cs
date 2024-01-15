@@ -11,22 +11,25 @@ namespace WebStore.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
-        private readonly IMapper _mapper;
 
-        public CategoryController(ICategoryService categoryService, IMapper mapper)
+        public CategoryController(ICategoryService categoryService)
         {
-            _mapper = mapper;
             _categoryService = categoryService;
+        }
+        
+        [HttpGet("{categoryId:int}")]
+        [ProducesResponseType(200, Type = typeof(ICollection<Product>))]
+        public IActionResult GetProductsById(int categoryId)
+        {
+            var products = _categoryService.GetCategoryById(categoryId);
+            return Ok(products);
         }
 
         [HttpGet("{categoryName}")]
         [ProducesResponseType(200, Type = typeof(ICollection<Product>))]
         public IActionResult GetProductsByCategory(string categoryName)
         {
-            categoryName =
-                string.Concat(char.ToUpper(categoryName[0]), categoryName[1..].ToLower())
-                    .Trim(); // put the string in titlecase
-            var products = _mapper.Map<List<ProductDto>>(_categoryService.GetProductsByCategory(categoryName));
+            var products = _categoryService.GetProductsByCategory(categoryName);
             return Ok(products);
         }
 
@@ -34,7 +37,7 @@ namespace WebStore.Controllers
         [ProducesResponseType(200, Type = typeof(ICollection<Category>))]
         public IActionResult GetCategory()
         {
-            var categories = _mapper.Map<List<CategoryDto>>(_categoryService.GetCategories());
+            var categories = _categoryService.GetCategories();
             return Ok(categories);
         }
     }

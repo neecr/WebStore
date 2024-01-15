@@ -1,8 +1,7 @@
-namespace WebStore.Dto
+namespace WebStore.Dto.RequestDtos
 {
-    public class ProductDto
+    public class ProductRequestDto
     {
-        public int ProductId { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }
     }

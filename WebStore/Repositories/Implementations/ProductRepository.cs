@@ -13,7 +13,7 @@ namespace WebStore.Repositories.Implementations
             _context = context;
         }
 
-        public ICollection<Product> GetProducts()
+        public List<Product> GetProducts()
         {
             return _context.Products.OrderBy(p => p.ProductId).ToList();
         }
@@ -30,6 +30,11 @@ namespace WebStore.Repositories.Implementations
                     Price = p.Price,
                     Category = c
                 }).FirstOrDefault()!;
+        }
+        public void CreateProduct(Product product)
+        {
+            _context.Products.Add(product);
+            _context.SaveChanges();
         }
     }
 }

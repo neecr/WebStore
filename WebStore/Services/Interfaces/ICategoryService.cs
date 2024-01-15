@@ -1,11 +1,13 @@
+using WebStore.Dto;
 using WebStore.Models;
 
 namespace WebStore.Services.Interfaces
 {
     public interface ICategoryService
     {
-        public ICollection<Product> GetProductsByCategory(string categoryName);
+        public CategoryDto GetCategoryById(int caterogyId);
+        public List<ProductDto> GetProductsByCategory(string categoryName);
 
-        public ICollection<Category> GetCategories();
+        public List<CategoryDto> GetCategories();
     }
 }

@@ -6,6 +6,6 @@ namespace WebStore.Dto
     {
         public string Name { get; set; }
         public double Price { get; set; }
-        public Category Category { get; set; }
+        public CategoryDto Category { get; set; }
     }
 }

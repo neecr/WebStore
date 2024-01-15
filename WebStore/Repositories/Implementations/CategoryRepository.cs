@@ -13,12 +13,17 @@ namespace WebStore.Repositories.Implementations
             _context = context;
         }
 
-        public ICollection<Product> GetProductsByCategory(string categoryName)
+        public Category GetCategoryById(int caterogyId)
+        {
+            return _context.Categories.FirstOrDefault(c => c.CategoryId == caterogyId)!;
+        }
+
+        public List<Product> GetProductsByCategory(string categoryName)
         {
             return _context.Products.Where(p => p.Category.Name == categoryName).OrderBy(p => p.ProductId).ToList();
         }
 
-        public ICollection<Category> GetCategories()
+        public List<Category> GetCategories()
         {
             return _context.Categories.OrderBy(c => c.CategoryId).ToList();
         }

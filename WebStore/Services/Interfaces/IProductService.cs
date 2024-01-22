@@ -1,5 +1,6 @@
 using WebStore.Dto;
 using WebStore.Dto.RequestDtos;
+using WebStore.Dto.UpdateDtos;
 using WebStore.Models;
 
 namespace WebStore.Services.Interfaces
@@ -9,5 +10,6 @@ namespace WebStore.Services.Interfaces
         List<ProductDto> GetProducts();
         ProductByIdDto GetProductById(int productId);
         Product CreateProduct(int categoryId, ProductRequestDto product);
+        Product UpdateProduct(int productId, ProductUpdateDto product);
     }
 }

@@ -37,5 +37,19 @@ namespace WebStore.Repositories.Implementations
             _context.Products.Add(product);
             _context.SaveChanges();
         }
+
+        public Product UpdateProduct(int productId, Product product)
+        {
+            var existingProduct = _context.Products.Find(productId);
+            if (existingProduct == null) return null;
+            
+            existingProduct.Name = product.Name;
+            existingProduct.Price = product.Price;
+            existingProduct.CategoryId = product.CategoryId;
+
+            _context.SaveChanges();
+
+            return existingProduct;
+        }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Dto;
 using WebStore.Dto.RequestDtos;
+using WebStore.Dto.UpdateDtos;
 using WebStore.Models;
 using WebStore.Services.Interfaces;
 
@@ -50,6 +51,13 @@ namespace WebStore.Controllers
             
             var modelProduct = _productService.CreateProduct(categoryId, productRequestDto);
             return Ok(modelProduct);
+        }
+
+        [HttpPut("{productId:int}")]
+        public IActionResult CreateUpdate(int productId, ProductUpdateDto productUpdateDto)
+        {
+            var product = _productService.UpdateProduct(productId, productUpdateDto);
+            return Ok(product);
         }
     }
 }

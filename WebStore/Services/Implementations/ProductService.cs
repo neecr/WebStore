@@ -1,6 +1,7 @@
 using AutoMapper;
 using WebStore.Dto;
 using WebStore.Dto.RequestDtos;
+using WebStore.Dto.UpdateDtos;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
 using WebStore.Services.Interfaces;
@@ -33,6 +34,13 @@ namespace WebStore.Services.Implementations
             var newproduct = _mapper.Map<Product>(product);
             _productRepository.CreateProduct(categoryId, newproduct);
             return newproduct;
+        }
+
+        public Product UpdateProduct(int productId, ProductUpdateDto product)
+        {
+            var updatedproduct = _mapper.Map<Product>(product);
+            _productRepository.UpdateProduct(productId, updatedproduct);
+            return updatedproduct;
         }
     }
 }

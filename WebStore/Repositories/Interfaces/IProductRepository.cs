@@ -8,5 +8,6 @@ namespace WebStore.Repositories.Interfaces
         Product GetProductById(int productId);
         
         void CreateProduct(int categoryId, Product product);
+        Product UpdateProduct(int productId, Product product);
     }
 }

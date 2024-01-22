@@ -8,6 +8,6 @@ namespace WebStore.Services.Interfaces
     {
         List<ProductDto> GetProducts();
         ProductByIdDto GetProductById(int productId);
-        void CreateProduct(ProductRequestDto product);
+        Product CreateProduct(int categoryId, ProductRequestDto product);
     }
 }

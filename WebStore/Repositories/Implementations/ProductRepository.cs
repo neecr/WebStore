@@ -31,8 +31,9 @@ namespace WebStore.Repositories.Implementations
                     Category = c
                 }).FirstOrDefault()!;
         }
-        public void CreateProduct(Product product)
+        public void CreateProduct(int categoryId, Product product)
         {
+            product.CategoryId = categoryId;
             _context.Products.Add(product);
             _context.SaveChanges();
         }

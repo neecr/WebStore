@@ -27,5 +27,10 @@ namespace WebStore.Repositories.Implementations
         {
             return _context.Categories.OrderBy(c => c.CategoryId).ToList();
         }
+
+        public bool IsCategoryExists(int categoryId)
+        {
+            return _context.Categories.Any(c => c.CategoryId == categoryId);
+        }
     }
 }

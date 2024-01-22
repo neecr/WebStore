@@ -9,5 +9,7 @@ namespace WebStore.Services.Interfaces
         public List<ProductDto> GetProductsByCategory(string categoryName);
 
         public List<CategoryDto> GetCategories();
+
+        public bool IsCategoryExists(int categoryId);
     }
 }

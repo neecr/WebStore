@@ -13,13 +13,11 @@ namespace WebStore.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
-        private IMapper _mapper;
 
-        public ProductController(IProductService productService, ICategoryService categoryService, IMapper mapper)
+        public ProductController(IProductService productService, ICategoryService categoryService)
         {
             _productService = productService;
             _categoryService = categoryService;
-            _mapper = mapper;
         }
 
         [HttpGet]
@@ -42,14 +40,16 @@ namespace WebStore.Controllers
             return Ok(product);
         }
         
-        /*[HttpPost]
-        public IActionResult CreateProduct([FromQuery] int categoryId, [FromBody] ProductRequestDto product)
+        [HttpPost("{categoryId:int}")]
+        public IActionResult CreateProduct(int categoryId, ProductRequestDto productRequestDto)
         {
-            var productMap = _mapper.Map<Product>(product);
+            if (!_categoryService.IsCategoryExists(categoryId))
+            {
+                return BadRequest("The category with such ID does not exist.");
+            }
             
-            productMap.Category = _categoryService.GetCategoryById(categoryId);
-            _productService.CreateProduct(product);
-            return Ok("test");
-        }*/
+            var modelProduct = _productService.CreateProduct(categoryId, productRequestDto);
+            return Ok(modelProduct);
+        }
     }
 }

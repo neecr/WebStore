@@ -7,5 +7,7 @@ namespace WebStore.Repositories.Interfaces
         public Category GetCategoryById(int caterogyId);   
         public List<Product> GetProductsByCategory(string categoryName);
         public List<Category> GetCategories();
+
+        public bool IsCategoryExists(int categoryId);
     }
 }

@@ -28,9 +28,11 @@ namespace WebStore.Services.Implementations
             return _mapper.Map<ProductByIdDto>(_productRepository.GetProductById(productId));
         }
 
-        public void CreateProduct(ProductRequestDto product)
+        public Product CreateProduct(int categoryId, ProductRequestDto product)
         {
-            _productRepository.CreateProduct(_mapper.Map<Product>(product));
+            var newproduct = _mapper.Map<Product>(product);
+            _productRepository.CreateProduct(categoryId, newproduct);
+            return newproduct;
         }
     }
 }

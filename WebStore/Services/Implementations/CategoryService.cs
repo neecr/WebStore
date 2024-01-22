@@ -30,5 +30,10 @@ namespace WebStore.Services.Implementations
         {
             return _mapper.Map<List<CategoryDto>>(_categoryRepository.GetCategories());
         }
+
+        public bool IsCategoryExists(int categoryId)
+        {
+            return _categoryRepository.IsCategoryExists(categoryId);
+        }
     }
 }

@@ -18,6 +18,12 @@ namespace WebStore
             
             CreateMap<ProductUpdateDto, Product>();
             CreateMap<Product, ProductUpdateDto>();
+            
+            CreateMap<CategoryRequestDto, Category>();
+            CreateMap<Category, CategoryRequestDto>();
+
+            CreateMap<CategoryUpdateDto, Category>();
+            CreateMap<Category, CategoryUpdateDto>();
 
             CreateMap<ProductByIdDto, Product>();
             

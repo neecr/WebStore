@@ -1,5 +1,7 @@
 using AutoMapper;
 using WebStore.Dto;
+using WebStore.Dto.RequestDtos;
+using WebStore.Dto.UpdateDtos;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
 using WebStore.Services.Interfaces;
@@ -29,6 +31,20 @@ namespace WebStore.Services.Implementations
         public List<CategoryDto> GetCategories()
         {
             return _mapper.Map<List<CategoryDto>>(_categoryRepository.GetCategories());
+        }
+
+        public Category CreateCategory(CategoryRequestDto categoryRequestDto)
+        {
+            var newcategory = _mapper.Map<Category>(categoryRequestDto);
+            _categoryRepository.CreateCategory(newcategory);
+            return newcategory; 
+        }
+
+        public Category UpdateCategory(int categoryId, CategoryUpdateDto categoryUpdateDto)
+        {
+            var updatedcategory = _mapper.Map<Category>(categoryUpdateDto);
+            _categoryRepository.UpdateCategory(categoryId, updatedcategory);
+            return updatedcategory;
         }
 
         public bool IsCategoryExists(int categoryId)

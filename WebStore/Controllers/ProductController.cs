@@ -57,6 +57,7 @@ namespace WebStore.Controllers
         public IActionResult CreateUpdate(int productId, ProductUpdateDto productUpdateDto)
         {
             var product = _productService.UpdateProduct(productId, productUpdateDto);
+            product.ProductId = productId;
             return Ok(product);
         }
     }

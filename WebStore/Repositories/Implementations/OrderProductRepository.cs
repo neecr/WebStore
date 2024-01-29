@@ -29,5 +29,29 @@ namespace WebStore.Repositories.Implementations
                     Order = o
                 }).ToList();
         }
+
+        public OrderProduct CreateOrderProduct(int productId, int orderId, OrderProduct orderProduct)
+        {
+            orderProduct.ProductId = productId;
+            orderProduct.OrderId = orderId;
+
+            _context.OrderProduct.Add(orderProduct);
+            _context.SaveChanges();
+            return orderProduct;
+        }
+
+        public OrderProduct UpdateOrderProduct(int orderProductId, OrderProduct orderProduct)
+        {
+            var existingOrderProduct = _context.OrderProduct.Find(orderProductId);
+            if (existingOrderProduct == null) return null;
+
+            existingOrderProduct.Count = orderProduct.Count;
+            existingOrderProduct.OrderId = orderProduct.OrderId;
+            existingOrderProduct.ProductId = orderProduct.ProductId;
+
+            _context.SaveChanges();
+
+            return existingOrderProduct;
+        }
     }
 }

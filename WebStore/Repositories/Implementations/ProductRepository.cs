@@ -51,5 +51,10 @@ namespace WebStore.Repositories.Implementations
 
             return existingProduct;
         }
+
+        public bool IsProductExists(int productId)
+        {
+            return _context.Products.Any(p => p.ProductId == productId);
+        }
     }
 }

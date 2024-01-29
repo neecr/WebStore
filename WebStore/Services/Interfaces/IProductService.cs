@@ -11,5 +11,6 @@ namespace WebStore.Services.Interfaces
         ProductByIdDto GetProductById(int productId);
         Product CreateProduct(int categoryId, ProductRequestDto product);
         Product UpdateProduct(int productId, ProductUpdateDto product);
+        public bool IsProductExists(int productId);
     }
 }

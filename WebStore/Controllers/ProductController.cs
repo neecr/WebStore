@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using WebStore.Dto;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebStore.Dto.RequestDtos;
 using WebStore.Dto.UpdateDtos;
 using WebStore.Models;
@@ -56,6 +54,11 @@ namespace WebStore.Controllers
         [HttpPut("{productId:int}")]
         public IActionResult CreateUpdate(int productId, ProductUpdateDto productUpdateDto)
         {
+            if (!_categoryService.IsCategoryExists(productUpdateDto.CategoryId))
+            {
+                return BadRequest("The category with such ID does not exist.");
+            }
+            
             var product = _productService.UpdateProduct(productId, productUpdateDto);
             product.ProductId = productId;
             return Ok(product);

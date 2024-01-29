@@ -1,6 +1,4 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using WebStore.Dto;
 using WebStore.Dto.RequestDtos;
 using WebStore.Dto.UpdateDtos;
 using WebStore.Models;

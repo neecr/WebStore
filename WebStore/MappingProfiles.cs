@@ -25,6 +25,18 @@ namespace WebStore
             CreateMap<CategoryUpdateDto, Category>();
             CreateMap<Category, CategoryUpdateDto>();
 
+            CreateMap<Order, OrderRequestDto>();
+            CreateMap<OrderRequestDto, Order>();
+
+            CreateMap<Order, OrderUpdateDto>();
+            CreateMap<OrderUpdateDto, Order>();
+
+            CreateMap<OrderProduct, OpRequestDto>();
+            CreateMap<OpRequestDto, OrderProduct>();
+            
+            CreateMap<OrderProduct, OpUpdateDto>();
+            CreateMap<OpUpdateDto, OrderProduct>();
+
             CreateMap<ProductByIdDto, Product>();
             
             CreateMap<Category, CategoryDto>();

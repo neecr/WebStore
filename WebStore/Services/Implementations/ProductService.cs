@@ -42,5 +42,10 @@ namespace WebStore.Services.Implementations
             _productRepository.UpdateProduct(productId, updatedproduct);
             return updatedproduct;
         }
+
+        public bool IsProductExists(int productId)
+        {
+            return _productRepository.IsProductExists(productId);
+        }
     }
 }

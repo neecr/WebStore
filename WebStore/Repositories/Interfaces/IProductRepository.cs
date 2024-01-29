@@ -9,5 +9,6 @@ namespace WebStore.Repositories.Interfaces
         
         void CreateProduct(int categoryId, Product product);
         Product UpdateProduct(int productId, Product product);
+        public bool IsProductExists(int productId);
     }
 }

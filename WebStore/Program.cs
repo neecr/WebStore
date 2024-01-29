@@ -28,7 +28,8 @@ namespace WebStore
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IOrderProductRepository, OrderProductRepository>();
             builder.Services.AddScoped<IOrderProductService, OrderProductService>();
-
+            builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<DataContext>(options =>

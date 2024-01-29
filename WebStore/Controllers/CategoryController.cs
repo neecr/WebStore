@@ -1,6 +1,6 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using WebStore.Dto;
+using WebStore.Dto.RequestDtos;
+using WebStore.Dto.UpdateDtos;
 using WebStore.Models;
 using WebStore.Services.Interfaces;
 
@@ -11,22 +11,25 @@ namespace WebStore.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
-        private readonly IMapper _mapper;
 
-        public CategoryController(ICategoryService categoryService, IMapper mapper)
+        public CategoryController(ICategoryService categoryService)
         {
-            _mapper = mapper;
             _categoryService = categoryService;
+        }
+        
+        [HttpGet("{categoryId:int}")]
+        [ProducesResponseType(200, Type = typeof(ICollection<Product>))]
+        public IActionResult GetProductsById(int categoryId)
+        {
+            var products = _categoryService.GetCategoryById(categoryId);
+            return Ok(products);
         }
 
         [HttpGet("{categoryName}")]
         [ProducesResponseType(200, Type = typeof(ICollection<Product>))]
         public IActionResult GetProductsByCategory(string categoryName)
         {
-            categoryName =
-                string.Concat(char.ToUpper(categoryName[0]), categoryName[1..].ToLower())
-                    .Trim(); // put the string in titlecase
-            var products = _mapper.Map<List<ProductDto>>(_categoryService.GetProductsByCategory(categoryName));
+            var products = _categoryService.GetProductsByCategory(categoryName);
             return Ok(products);
         }
 
@@ -34,8 +37,22 @@ namespace WebStore.Controllers
         [ProducesResponseType(200, Type = typeof(ICollection<Category>))]
         public IActionResult GetCategory()
         {
-            var categories = _mapper.Map<List<CategoryDto>>(_categoryService.GetCategories());
+            var categories = _categoryService.GetCategories();
             return Ok(categories);
+        }
+        [HttpPost]
+        public IActionResult CreateCategory(CategoryRequestDto categoryRequestDto)
+        {
+            var modelCategory = _categoryService.CreateCategory(categoryRequestDto);
+            return Ok(modelCategory);
+        }
+
+        [HttpPut("{categoryId:int}")]
+        public IActionResult UpdateCategory(int categoryId, CategoryUpdateDto categoryUpdateDto)
+        {
+            var category = _categoryService.UpdateCategory(categoryId, categoryUpdateDto);
+            category.CategoryId = categoryId;
+            return Ok(category);
         }
     }
 }

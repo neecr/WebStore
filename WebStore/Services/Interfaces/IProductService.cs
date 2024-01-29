@@ -1,10 +1,16 @@
+using WebStore.Dto;
+using WebStore.Dto.RequestDtos;
+using WebStore.Dto.UpdateDtos;
 using WebStore.Models;
 
 namespace WebStore.Services.Interfaces
 {
     public interface IProductService
     {
-        ICollection<Product> GetProducts();
-        Product GetProductById(int productId);
+        List<ProductDto> GetProducts();
+        ProductByIdDto GetProductById(int productId);
+        Product CreateProduct(int categoryId, ProductRequestDto product);
+        Product UpdateProduct(int productId, ProductUpdateDto product);
+        public bool IsProductExists(int productId);
     }
 }

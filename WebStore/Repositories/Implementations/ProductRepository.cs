@@ -13,7 +13,7 @@ namespace WebStore.Repositories.Implementations
             _context = context;
         }
 
-        public ICollection<Product> GetProducts()
+        public List<Product> GetProducts()
         {
             return _context.Products.OrderBy(p => p.ProductId).ToList();
         }
@@ -30,6 +30,31 @@ namespace WebStore.Repositories.Implementations
                     Price = p.Price,
                     Category = c
                 }).FirstOrDefault()!;
+        }
+        public void CreateProduct(int categoryId, Product product)
+        {
+            product.CategoryId = categoryId;
+            _context.Products.Add(product);
+            _context.SaveChanges();
+        }
+
+        public Product UpdateProduct(int productId, Product product)
+        {
+            var existingProduct = _context.Products.Find(productId);
+            if (existingProduct == null) return null;
+            
+            existingProduct.Name = product.Name;
+            existingProduct.Price = product.Price;
+            existingProduct.CategoryId = product.CategoryId;
+
+            _context.SaveChanges();
+
+            return existingProduct;
+        }
+
+        public bool IsProductExists(int productId)
+        {
+            return _context.Products.Any(p => p.ProductId == productId);
         }
     }
 }

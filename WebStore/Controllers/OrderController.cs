@@ -38,25 +38,14 @@ namespace WebStore.Controllers
         [HttpPost("{customerId:int}")]
         public IActionResult CreateOrder(int customerId, OrderRequestDto orderRequestDto)
         {
-            if (!_customerService.IsCustomerExists(customerId))
-            {
-                return BadRequest("The customer with such ID does not exist.");
-            }
-            
             var modelOrder = _orderService.CreateOrder(customerId, orderRequestDto);
             return Ok(modelOrder);
         }
         
         [HttpPut("{orderId:int}")]
-        public IActionResult CreateUpdate(int orderId, OrderUpdateDto productUpdateDto)
+        public IActionResult UpdateOrder(int orderId, OrderUpdateDto productUpdateDto)
         {
-            if (!_customerService.IsCustomerExists(productUpdateDto.CustomerId))
-            {
-                return BadRequest("The customer with such ID does not exist.");
-            }
-            
             var order = _orderService.UpdateOrder(orderId, productUpdateDto);
-            order.OrderId = orderId;
             return Ok(order);
         }
     }

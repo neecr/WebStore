@@ -40,6 +40,7 @@ namespace WebStore.Services.Implementations
         {
             var updatedproduct = _mapper.Map<Product>(product);
             _productRepository.UpdateProduct(productId, updatedproduct);
+            updatedproduct.ProductId = productId;
             return updatedproduct;
         }
 

@@ -42,25 +42,14 @@ namespace WebStore.Controllers
         [HttpPost("{categoryId:int}")]
         public IActionResult CreateProduct(int categoryId, ProductRequestDto productRequestDto)
         {
-            if (!_categoryService.IsCategoryExists(categoryId))
-            {
-                return BadRequest("The category with such ID does not exist.");
-            }
-            
             var modelProduct = _productService.CreateProduct(categoryId, productRequestDto);
             return Ok(modelProduct);
         }
 
         [HttpPut("{productId:int}")]
-        public IActionResult CreateUpdate(int productId, ProductUpdateDto productUpdateDto)
+        public IActionResult UpdateProduct(int productId, ProductUpdateDto productUpdateDto)
         {
-            if (!_categoryService.IsCategoryExists(productUpdateDto.CategoryId))
-            {
-                return BadRequest("The category with such ID does not exist.");
-            }
-            
             var product = _productService.UpdateProduct(productId, productUpdateDto);
-            product.ProductId = productId;
             return Ok(product);
         }
     }

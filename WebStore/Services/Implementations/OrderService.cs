@@ -41,6 +41,7 @@ namespace WebStore.Services.Implementations
         {
             var updatedorder = _mapper.Map<Order>(orderUpdateDto);
             _repository.UpdateOrder(orderId, updatedorder);
+            updatedorder.OrderId = orderId;
             return updatedorder;
         }
 

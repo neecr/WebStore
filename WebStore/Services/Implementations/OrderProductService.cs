@@ -36,6 +36,7 @@ namespace WebStore.Services.Implementations
         {
             var updateorderproduct = _mapper.Map<OrderProduct>(opUpdateDto);
             _repository.UpdateOrderProduct(orderProductId, updateorderproduct);
+            updateorderproduct.OrderProductId = orderProductId;
             return updateorderproduct;
         }
     }

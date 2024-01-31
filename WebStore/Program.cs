@@ -50,6 +50,7 @@ namespace WebStore
             }
 
             app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionHandler>();
             app.UseAuthorization();
             app.MapControllers();
             app.Run();

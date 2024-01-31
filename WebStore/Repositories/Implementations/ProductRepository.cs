@@ -1,4 +1,5 @@
 ﻿using WebStore.Data;
+using WebStore.Exceptions;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
 
@@ -20,7 +21,7 @@ namespace WebStore.Repositories.Implementations
 
         public Product GetProductById(int productId)
         {
-            return (from p in _context.Products
+            var product = (from p in _context.Products
                 join c in _context.Categories on p.CategoryId equals c.CategoryId
                 where p.ProductId == productId
                 select new Product
@@ -29,10 +30,17 @@ namespace WebStore.Repositories.Implementations
                     Name = p.Name,
                     Price = p.Price,
                     Category = c
-                }).FirstOrDefault()!;
+                }).FirstOrDefault();
+
+            if (product == null) throw new NotFoundException("The product with such ID is not found.");
+            return product;
         }
+
         public void CreateProduct(int categoryId, Product product)
         {
+            if (_context.Categories.Find(categoryId) == null)
+                throw new NotFoundException("The category with such ID is not found.");
+
             product.CategoryId = categoryId;
             _context.Products.Add(product);
             _context.SaveChanges();
@@ -41,8 +49,7 @@ namespace WebStore.Repositories.Implementations
         public Product UpdateProduct(int productId, Product product)
         {
             var existingProduct = _context.Products.Find(productId);
-            if (existingProduct == null) return null;
-            
+            if (existingProduct == null) throw new NotFoundException("The product with such ID is not found.");
             existingProduct.Name = product.Name;
             existingProduct.Price = product.Price;
             existingProduct.CategoryId = product.CategoryId;

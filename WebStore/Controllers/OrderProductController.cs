@@ -33,16 +33,6 @@ namespace WebStore.Controllers
         [HttpPost("{orderId:int}, {productId:int}")]
         public IActionResult CreateOrderProduct(int orderId, int productId, OpRequestDto opRequestDto)
         {
-            if (!_productService.IsProductExists(productId))
-            {
-                return BadRequest("The product with such ID does not exist.");
-            }
-
-            if (!_orderService.IsOrderExists(orderId))
-            {
-                return BadRequest("The order with such ID does not exist.");
-            }
-
             var modelProduct = _orderProductService.CreateOrderProduct(productId, orderId, opRequestDto);
             return Ok(modelProduct);
         }
@@ -50,18 +40,7 @@ namespace WebStore.Controllers
         [HttpPut("{orderProductId:int}")]
         public IActionResult UpdateOrderProduct(int orderProductId, OpUpdateDto opUpdateDto)
         {
-            if (!_productService.IsProductExists(opUpdateDto.ProductId))
-            {
-                return BadRequest("The product with such ID does not exist.");
-            }
-            
-            if (!_orderService.IsOrderExists(opUpdateDto.OrderId))
-            {
-                return BadRequest("The order with such ID does not exist.");
-            }
-            
             var orderProduct = _orderProductService.UpdateOrderProduct(orderProductId, opUpdateDto);
-            orderProduct.OrderProductId = orderProductId;
             return Ok(orderProduct);
         }
     }

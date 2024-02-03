@@ -39,5 +39,10 @@ namespace WebStore.Services.Implementations
             updateorderproduct.OrderProductId = orderProductId;
             return updateorderproduct;
         }
+
+        public void DeleteOrderProduct(int orderProductId)
+        {
+            _repository.DeleteOrderProduct(orderProductId);
+        }
     }
 }

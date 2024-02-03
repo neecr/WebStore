@@ -51,6 +51,15 @@ namespace WebStore.Repositories.Implementations
             return existingOrder;
         }
 
+        public void DeleteOrder(int orderId)
+        {
+            var existingOrder = _context.Orders.Find(orderId);
+            if (existingOrder == null) throw new NotFoundException("The order with such ID is not found.");
+
+            _context.Orders.Remove(existingOrder);
+            _context.SaveChanges();
+        }
+
         public bool IsOrderExists(int orderId)
         {
             return _context.Orders.Any(o => o.OrderId == orderId);

@@ -55,6 +55,16 @@ namespace WebStore.Repositories.Implementations
             return existingCategory;
         }
 
+        public void DeleteCategory(int categoryId)
+        {
+            var existingCategory = _context.Categories.Find(categoryId);
+            if (existingCategory == null)
+                throw new NotFoundException("The category with such ID is not found");
+
+            _context.Categories.Remove(existingCategory);
+            _context.SaveChanges();
+        }
+
         public bool IsCategoryExists(int categoryId)
         {
             return _context.Categories.Any(c => c.CategoryId == categoryId);

@@ -52,5 +52,12 @@ namespace WebStore.Controllers
             var product = _productService.UpdateProduct(productId, productUpdateDto);
             return Ok(product);
         }
+
+        [HttpDelete("{productId:int}")]
+        public IActionResult DeleteProduct(int productId)
+        {
+            _productService.DeleteProduct(productId);
+            return NoContent();
+        }
     }
 }

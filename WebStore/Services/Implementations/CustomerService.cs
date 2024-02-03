@@ -16,5 +16,10 @@ namespace WebStore.Services.Implementations
         {
             return _customerRepository.IsCustomerExists(customerId);
         }
+
+        public void DeleteCustomer(int customerId)
+        {
+            _customerRepository.DeleteCustomer(customerId);
+        }
     }
 }

@@ -11,6 +11,8 @@ namespace WebStore.Services.Interfaces
         public List<OrderDto> GetCustomerOrders(int customerId);
         public Order CreateOrder(int customerId, OrderRequestDto orderRequestDto);
         public Order UpdateOrder(int orderId, OrderUpdateDto orderUpdateDto);
+
+        public void DeleteOrder(int orderId);
         public bool IsOrderExists(int orderId);
     }
 }

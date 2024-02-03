@@ -54,5 +54,12 @@ namespace WebStore.Controllers
             category.CategoryId = categoryId;
             return Ok(category);
         }
+        
+        [HttpDelete("{categoryId:int}")]
+        public IActionResult DeleteOrderProduct(int categoryId)
+        {
+            _categoryService.DeleteCategory(categoryId);
+            return NoContent();
+        }
     }
 }

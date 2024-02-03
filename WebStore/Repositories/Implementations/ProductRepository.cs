@@ -59,6 +59,15 @@ namespace WebStore.Repositories.Implementations
             return existingProduct;
         }
 
+        public void DeleteProduct(int productId)
+        {
+            var existingProduct = _context.Products.Find(productId);
+            if (existingProduct == null) throw new NotFoundException("The product with such ID is not found.");
+
+            _context.Products.Remove(existingProduct);
+            _context.SaveChanges();
+        }
+
         public bool IsProductExists(int productId)
         {
             return _context.Products.Any(p => p.ProductId == productId);

@@ -47,6 +47,11 @@ namespace WebStore.Services.Implementations
             return updatedcategory;
         }
 
+        public void DeleteCategory(int categoryId)
+        {
+            _categoryRepository.DeleteCategory(categoryId);
+        }
+
         public bool IsCategoryExists(int categoryId)
         {
             return _categoryRepository.IsCategoryExists(categoryId);

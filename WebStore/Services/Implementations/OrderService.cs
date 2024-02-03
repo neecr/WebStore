@@ -45,6 +45,11 @@ namespace WebStore.Services.Implementations
             return updatedorder;
         }
 
+        public void DeleteOrder(int orderId)
+        {
+            _repository.DeleteOrder(orderId);
+        }
+
         public bool IsOrderExists(int orderId)
         {
             return _repository.IsOrderExists(orderId);

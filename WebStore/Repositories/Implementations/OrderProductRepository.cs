@@ -63,5 +63,15 @@ namespace WebStore.Repositories.Implementations
 
             return existingOrderProduct;
         }
+
+        public void DeleteOrderProduct(int orderProductId)
+        {
+            var existingOrderProduct = _context.OrderProduct.Find(orderProductId);
+            if (existingOrderProduct == null)
+                throw new NotFoundException("The pair of order and product with such ID is not found.");
+
+            _context.OrderProduct.Remove(existingOrderProduct);
+            _context.SaveChanges();
+        }
     }
 }

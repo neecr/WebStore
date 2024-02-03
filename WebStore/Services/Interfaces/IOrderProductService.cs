@@ -10,5 +10,6 @@ namespace WebStore.Services.Interfaces
         public List<OrderProductDto> GetOrderProducts(int orderId);
         public OrderProduct CreateOrderProduct(int productId, int orderId, OpRequestDto opRequestDto);
         public OrderProduct UpdateOrderProduct(int orderProductId, OpUpdateDto opUpdateDto);
+        public void DeleteOrderProduct(int orderProductId);
     }
 }

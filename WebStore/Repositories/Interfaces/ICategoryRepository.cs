@@ -9,6 +9,7 @@ namespace WebStore.Repositories.Interfaces
         public List<Category> GetCategories();
         public Category CreateCategory(Category category);
         public Category UpdateCategory(int categoryId, Category category);
+        public void DeleteCategory(int categoryId);
         public bool IsCategoryExists(int categoryId);
     }
 }

@@ -36,6 +36,12 @@ namespace WebStore
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
             });
+            
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.WriteIndented = true;
+            });
 
             var app = builder.Build();
 

@@ -44,6 +44,11 @@ namespace WebStore.Services.Implementations
             return updatedproduct;
         }
 
+        public void DeleteProduct(int productId)
+        {
+            _productRepository.DeleteProduct(productId);
+        }
+
         public bool IsProductExists(int productId)
         {
             return _productRepository.IsProductExists(productId);

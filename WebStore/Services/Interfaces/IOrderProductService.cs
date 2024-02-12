@@ -8,8 +8,8 @@ namespace WebStore.Services.Interfaces
     public interface IOrderProductService
     {
         public List<OrderProductDto> GetOrderProducts(int orderId);
-        public OrderProduct CreateOrderProduct(int productId, int orderId, OpRequestDto opRequestDto);
-        public OrderProduct UpdateOrderProduct(int orderProductId, OpUpdateDto opUpdateDto);
+        public OrderProduct CreateOrderProduct(OrderProductRequestDto orderProductRequestDto);
+        public OrderProduct UpdateOrderProduct(int orderProductId, OrderProductUpdateDto orderProductUpdateDto);
         public void DeleteOrderProduct(int orderProductId);
     }
 }

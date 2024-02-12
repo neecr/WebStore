@@ -31,11 +31,14 @@ namespace WebStore
             CreateMap<Order, OrderUpdateDto>();
             CreateMap<OrderUpdateDto, Order>();
 
-            CreateMap<OrderProduct, OpRequestDto>();
-            CreateMap<OpRequestDto, OrderProduct>();
+            CreateMap<OrderProduct, OrderProductRequestDto>();
+            CreateMap<OrderProductRequestDto, OrderProduct>();
             
-            CreateMap<OrderProduct, OpUpdateDto>();
-            CreateMap<OpUpdateDto, OrderProduct>();
+            CreateMap<OrderProduct, OrderProductUpdateDto>();
+            CreateMap<OrderProductUpdateDto, OrderProduct>();
+
+            CreateMap<User, UserRequestDto>();
+            CreateMap<UserRequestDto, User>();
 
             CreateMap<ProductByIdDto, Product>();
             

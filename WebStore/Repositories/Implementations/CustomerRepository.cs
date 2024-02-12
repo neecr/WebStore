@@ -1,5 +1,4 @@
 using WebStore.Data;
-using WebStore.Exceptions;
 using WebStore.Repositories.Interfaces;
 
 namespace WebStore.Repositories.Implementations
@@ -20,12 +19,8 @@ namespace WebStore.Repositories.Implementations
         {
             var existingCustomer = _context.Customers.Find(customerId);
             
-            if (existingCustomer == null)
-                throw new NotFoundException("The customer with such ID is not found.");
-
-            _context.Customers.Remove(existingCustomer);
+            _context.Customers.Remove(existingCustomer!);
             _context.SaveChanges();
         }
-        
     }
 }

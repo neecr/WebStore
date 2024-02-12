@@ -1,59 +1,57 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebStore.Dto.RequestDtos;
 using WebStore.Dto.UpdateDtos;
-using WebStore.Models;
 using WebStore.Services.Interfaces;
 
 namespace WebStore.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
+    [Route("[controller]")]
     [ApiController]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
-        private readonly ICategoryService _categoryService;
 
-        public ProductController(IProductService productService, ICategoryService categoryService)
+        public ProductController(IProductService productService)
         {
             _productService = productService;
-            _categoryService = categoryService;
         }
 
+        [Route("getProducts")]
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(ICollection<Product>))]
         public IActionResult GetProducts()
         {
             var products = _productService.GetProducts();
             return Ok(products);
         }
         
-        [HttpGet("{productId:int}")]
-        [ProducesResponseType(200, Type = typeof(Product))]
+        [Route("getProductsById/{productId:int}")]
+        [HttpGet]
         public IActionResult GetProductById(int productId)
         {
             var product = _productService.GetProductById(productId);
-            if (product == null)
-            {
-                return NotFound();
-            }
             return Ok(product);
         }
         
-        [HttpPost("{categoryId:int}")]
-        public IActionResult CreateProduct(int categoryId, ProductRequestDto productRequestDto)
+        [Route("create")]
+        [HttpPost]
+        public IActionResult CreateProduct(ProductRequestDto productRequestDto)
         {
-            var modelProduct = _productService.CreateProduct(categoryId, productRequestDto);
+            var modelProduct = _productService.CreateProduct(productRequestDto);
             return Ok(modelProduct);
         }
-
-        [HttpPut("{productId:int}")]
+        
+        [Route("edit/{productId:int}")]
+        [HttpPut]
         public IActionResult UpdateProduct(int productId, ProductUpdateDto productUpdateDto)
         {
             var product = _productService.UpdateProduct(productId, productUpdateDto);
             return Ok(product);
         }
 
-        [HttpDelete("{productId:int}")]
+        [Route("delete/{productId:int}")]
+        [HttpDelete]
         public IActionResult DeleteProduct(int productId)
         {
             _productService.DeleteProduct(productId);

@@ -2,6 +2,7 @@ using AutoMapper;
 using WebStore.Dto;
 using WebStore.Dto.RequestDtos;
 using WebStore.Dto.UpdateDtos;
+using WebStore.Exceptions;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
 using WebStore.Services.Interfaces;
@@ -20,7 +21,10 @@ namespace WebStore.Services.Implementations
 
         public CategoryDto GetCategoryById(int caterogyId)
         {
-            return _mapper.Map<CategoryDto>(_categoryRepository.GetCategoryById(caterogyId));
+            var category = _categoryRepository.GetCategoryById(caterogyId);
+            if (category == null) throw new NotFoundException("The category with such ID is not found.");
+            
+            return _mapper.Map<CategoryDto>(category);
         }
 
         public List<ProductDto> GetProductsByCategory(string categoryName)
@@ -35,26 +39,27 @@ namespace WebStore.Services.Implementations
 
         public Category CreateCategory(CategoryRequestDto categoryRequestDto)
         {
-            var newcategory = _mapper.Map<Category>(categoryRequestDto);
-            _categoryRepository.CreateCategory(newcategory);
-            return newcategory; 
+            var newCategory = _mapper.Map<Category>(categoryRequestDto);
+            _categoryRepository.CreateCategory(newCategory);
+            return newCategory; 
         }
 
         public Category UpdateCategory(int categoryId, CategoryUpdateDto categoryUpdateDto)
         {
-            var updatedcategory = _mapper.Map<Category>(categoryUpdateDto);
-            _categoryRepository.UpdateCategory(categoryId, updatedcategory);
-            return updatedcategory;
+            if (!_categoryRepository.IsCategoryExists(categoryId))
+                throw new NotFoundException("The category with such ID is not found");
+            
+            var updatedCategory = _mapper.Map<Category>(categoryUpdateDto);
+            _categoryRepository.UpdateCategory(categoryId, updatedCategory);
+            return updatedCategory;
         }
 
         public void DeleteCategory(int categoryId)
         {
+            if (!_categoryRepository.IsCategoryExists(categoryId))
+                throw new NotFoundException("The category with such ID is not found");
+            
             _categoryRepository.DeleteCategory(categoryId);
-        }
-
-        public bool IsCategoryExists(int categoryId)
-        {
-            return _categoryRepository.IsCategoryExists(categoryId);
         }
     }
 }

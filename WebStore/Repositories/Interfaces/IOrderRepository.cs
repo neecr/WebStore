@@ -6,7 +6,7 @@ namespace WebStore.Repositories.Interfaces
     {
         public List<Order> GetOrders();
         public List<Order> GetCustomerOrders(int customerId);
-        public Order CreateOrder(int customerId, Order order);
+        public Order CreateOrder(Order order);
         public Order UpdateOrder(int orderId, Order order);
         public void DeleteOrder(int orderId);
         public bool IsOrderExists(int orderId);

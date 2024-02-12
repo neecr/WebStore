@@ -1,12 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Dto.RequestDtos;
 using WebStore.Dto.UpdateDtos;
-using WebStore.Models;
 using WebStore.Services.Interfaces;
 
 namespace WebStore.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
+    [Route("[controller]")]
     [ApiController]
     public class CategoryController : Controller
     {
@@ -17,37 +18,40 @@ namespace WebStore.Controllers
             _categoryService = categoryService;
         }
         
-        [HttpGet("{categoryId:int}")]
-        [ProducesResponseType(200, Type = typeof(ICollection<Product>))]
-        public IActionResult GetProductsById(int categoryId)
+        [Route("getCategoryById/{categoryId:int}")]
+        [HttpGet]
+        public IActionResult GetCategoryById(int categoryId)
         {
             var products = _categoryService.GetCategoryById(categoryId);
             return Ok(products);
         }
 
-        [HttpGet("{categoryName}")]
-        [ProducesResponseType(200, Type = typeof(ICollection<Product>))]
+        [Route("getProductsInCategory/{categoryName}")]
+        [HttpGet]
         public IActionResult GetProductsByCategory(string categoryName)
         {
             var products = _categoryService.GetProductsByCategory(categoryName);
             return Ok(products);
         }
-
+        
+        [Route("getCategories")]
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(ICollection<Category>))]
-        public IActionResult GetCategory()
+        public IActionResult GetCategories()
         {
             var categories = _categoryService.GetCategories();
             return Ok(categories);
         }
+        
+        [Route("create")]
         [HttpPost]
         public IActionResult CreateCategory(CategoryRequestDto categoryRequestDto)
         {
             var modelCategory = _categoryService.CreateCategory(categoryRequestDto);
             return Ok(modelCategory);
         }
-
-        [HttpPut("{categoryId:int}")]
+        
+        [Route("edit/{categoryId:int}")]
+        [HttpPut]
         public IActionResult UpdateCategory(int categoryId, CategoryUpdateDto categoryUpdateDto)
         {
             var category = _categoryService.UpdateCategory(categoryId, categoryUpdateDto);
@@ -55,8 +59,9 @@ namespace WebStore.Controllers
             return Ok(category);
         }
         
-        [HttpDelete("{categoryId:int}")]
-        public IActionResult DeleteOrderProduct(int categoryId)
+        [Route("delete/{categoryId:int}")]
+        [HttpDelete]
+        public IActionResult DeleteCategory(int categoryId)
         {
             _categoryService.DeleteCategory(categoryId);
             return NoContent();

@@ -1,6 +1,4 @@
-using Microsoft.IdentityModel.Tokens;
 using WebStore.Data;
-using WebStore.Exceptions;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
 
@@ -17,17 +15,13 @@ namespace WebStore.Repositories.Implementations
 
         public Category GetCategoryById(int caterogyId)
         {
-            var category = _context.Categories.FirstOrDefault(c => c.CategoryId == caterogyId);
-            if (category == null) throw new Exception("The category with such ID is not found.");
-            return category;
+            return _context.Categories.FirstOrDefault(c => c.CategoryId == caterogyId)!;
         }
 
         public List<Product> GetProductsByCategory(string categoryName)
         {
-            var products = _context.Products.Where(p => p.Category.Name == categoryName).
+            return _context.Products.Where(p => p.Category.Name == categoryName).
                 OrderBy(p => p.ProductId).ToList();
-            if (products.IsNullOrEmpty()) throw new NotFoundException("The category with such name is not found.");
-            return products;
         }
 
         public List<Category> GetCategories()
@@ -44,9 +38,7 @@ namespace WebStore.Repositories.Implementations
 
         public Category UpdateCategory(int categoryId, Category category)
         {
-            var existingCategory = _context.Categories.Find(categoryId);
-            if (existingCategory == null)
-                throw new NotFoundException("The category with such ID is not found");
+            var existingCategory = _context.Categories.Find(categoryId)!;
 
             existingCategory.Name = category.Name;
 
@@ -57,10 +49,8 @@ namespace WebStore.Repositories.Implementations
 
         public void DeleteCategory(int categoryId)
         {
-            var existingCategory = _context.Categories.Find(categoryId);
-            if (existingCategory == null)
-                throw new NotFoundException("The category with such ID is not found");
-
+            var existingCategory = _context.Categories.Find(categoryId)!;
+            
             _context.Categories.Remove(existingCategory);
             _context.SaveChanges();
         }

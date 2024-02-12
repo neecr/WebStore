@@ -1,6 +1,6 @@
 namespace WebStore.Dto.UpdateDtos
 {
-    public class OpUpdateDto
+    public class OrderProductUpdateDto
     {
         public int Count { get; set; }
         public int ProductId { get; set; }

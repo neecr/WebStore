@@ -9,9 +9,8 @@ namespace WebStore.Services.Interfaces
     {
         List<ProductDto> GetProducts();
         ProductByIdDto GetProductById(int productId);
-        Product CreateProduct(int categoryId, ProductRequestDto product);
+        Product CreateProduct(ProductRequestDto product);
         Product UpdateProduct(int productId, ProductUpdateDto product);
         void DeleteProduct(int productId);
-        public bool IsProductExists(int productId);
     }
 }

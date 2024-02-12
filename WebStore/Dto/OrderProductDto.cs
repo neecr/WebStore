@@ -1,5 +1,3 @@
-using WebStore.Models;
-
 namespace WebStore.Dto
 {
     public class OrderProductDto

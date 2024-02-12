@@ -1,5 +1,4 @@
 ﻿using WebStore.Data;
-using WebStore.Exceptions;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
 
@@ -32,24 +31,19 @@ namespace WebStore.Repositories.Implementations
                     Category = c
                 }).FirstOrDefault();
 
-            if (product == null) throw new NotFoundException("The product with such ID is not found.");
-            return product;
+            return product!;
         }
 
-        public void CreateProduct(int categoryId, Product product)
+        public void CreateProduct(Product product)
         {
-            if (_context.Categories.Find(categoryId) == null)
-                throw new NotFoundException("The category with such ID is not found.");
-
-            product.CategoryId = categoryId;
             _context.Products.Add(product);
             _context.SaveChanges();
         }
 
         public Product UpdateProduct(int productId, Product product)
         {
-            var existingProduct = _context.Products.Find(productId);
-            if (existingProduct == null) throw new NotFoundException("The product with such ID is not found.");
+            var existingProduct = _context.Products.Find(productId)!;
+            
             existingProduct.Name = product.Name;
             existingProduct.Price = product.Price;
             existingProduct.CategoryId = product.CategoryId;
@@ -61,9 +55,7 @@ namespace WebStore.Repositories.Implementations
 
         public void DeleteProduct(int productId)
         {
-            var existingProduct = _context.Products.Find(productId);
-            if (existingProduct == null) throw new NotFoundException("The product with such ID is not found.");
-
+            var existingProduct = _context.Products.Find(productId)!;
             _context.Products.Remove(existingProduct);
             _context.SaveChanges();
         }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Dto.RequestDtos;
 using WebStore.Dto.UpdateDtos;
@@ -6,45 +7,43 @@ using WebStore.Services.Interfaces;
 
 namespace WebStore.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
+    [Route("[controller]")]
     [ApiController]
     public class OrderProductController : Controller
     {
         private readonly IOrderProductService _orderProductService;
-        private readonly IOrderService _orderService;
-        private readonly IProductService _productService;
-
-        public OrderProductController(IOrderProductService orderProductService, IOrderService orderService,
-            IProductService productService)
+        public OrderProductController(IOrderProductService orderProductService)
         {
             _orderProductService = orderProductService;
-            _orderService = orderService;
-            _productService = productService;
         }
-
-        [HttpGet("{orderId:int}")]
-        [ProducesResponseType(200, Type = typeof(ICollection<OrderProduct>))]
+        
+        [Route("getOrderProducts/{orderId:int}")]
+        [HttpGet]
         public IActionResult GetOrderProducts(int orderId)
         {
             var orderProducts = _orderProductService.GetOrderProducts(orderId);
             return Ok(orderProducts);
         }
-
-        [HttpPost("{orderId:int}, {productId:int}")]
-        public IActionResult CreateOrderProduct(int orderId, int productId, OpRequestDto opRequestDto)
+        
+        [Route("create")]
+        [HttpPost]
+        public IActionResult CreateOrderProduct(OrderProductRequestDto orderProductRequestDto)
         {
-            var modelProduct = _orderProductService.CreateOrderProduct(productId, orderId, opRequestDto);
+            var modelProduct = _orderProductService.CreateOrderProduct(orderProductRequestDto);
             return Ok(modelProduct);
         }
 
-        [HttpPut("{orderProductId:int}")]
-        public IActionResult UpdateOrderProduct(int orderProductId, OpUpdateDto opUpdateDto)
+        [Route("edit/{orderProductId:int}")]
+        [HttpPut]
+        public IActionResult UpdateOrderProduct(int orderProductId, OrderProductUpdateDto orderProductUpdateDto)
         {
-            var orderProduct = _orderProductService.UpdateOrderProduct(orderProductId, opUpdateDto);
+            var orderProduct = _orderProductService.UpdateOrderProduct(orderProductId, orderProductUpdateDto);
             return Ok(orderProduct);
         }
-
-        [HttpDelete("{orderProductId:int}")]
+        
+        [Route("delete/{orderProductId:int}")]
+        [HttpDelete]
         public IActionResult DeleteOrderProduct(int orderProductId)
         {
             _orderProductService.DeleteOrderProduct(orderProductId);

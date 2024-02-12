@@ -1,5 +1,3 @@
-using WebStore.Models;
-
 namespace WebStore.Repositories.Interfaces
 {
     public interface ICustomerRepository

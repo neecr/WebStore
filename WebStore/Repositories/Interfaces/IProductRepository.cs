@@ -6,7 +6,7 @@ namespace WebStore.Repositories.Interfaces
     {
         List<Product> GetProducts();
         Product GetProductById(int productId);
-        void CreateProduct(int categoryId, Product product);
+        void CreateProduct(Product product);
         Product UpdateProduct(int productId, Product product);
         void DeleteProduct(int productId);
         public bool IsProductExists(int productId);

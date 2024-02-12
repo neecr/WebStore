@@ -45,6 +45,7 @@ namespace WebStore
         {
             DbUpdateException => HttpStatusCode.InternalServerError,
             NotFoundException => HttpStatusCode.NotFound,
+            WrongCredentialsException => HttpStatusCode.Unauthorized,
             _ => HttpStatusCode.InternalServerError,
         };
     }

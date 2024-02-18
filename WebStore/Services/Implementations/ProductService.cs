@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using WebStore.Dto;
 using WebStore.Dto.RequestDtos;
 using WebStore.Dto.UpdateDtos;
@@ -14,13 +15,16 @@ namespace WebStore.Services.Implementations
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
+        private readonly IValidator<Product> _validator;
+
 
         public ProductService(IProductRepository productRepository, IMapper mapper,
-            ICategoryRepository categoryRepository)
+            ICategoryRepository categoryRepository, IValidator<Product> validator)
         {
             _productRepository = productRepository;
             _mapper = mapper;
             _categoryRepository = categoryRepository;
+            _validator = validator;
         }
 
         public List<ProductDto> GetProducts()
@@ -42,6 +46,7 @@ namespace WebStore.Services.Implementations
                 throw new NotFoundException("The category with such ID is not found.");
 
             var newProduct = _mapper.Map<Product>(product);
+            Validate(newProduct);
             _productRepository.CreateProduct(newProduct);
             return newProduct;
         }
@@ -53,6 +58,7 @@ namespace WebStore.Services.Implementations
             if (!_categoryRepository.IsCategoryExists(product.CategoryId))
                 throw new NotFoundException("The category with such ID is not found.");
             var updatedProduct = _mapper.Map<Product>(product);
+            Validate(updatedProduct);
             _productRepository.UpdateProduct(productId, updatedProduct);
 
             updatedProduct.ProductId = productId;
@@ -64,6 +70,13 @@ namespace WebStore.Services.Implementations
             if (!_productRepository.IsProductExists(productId))
                 throw new NotFoundException("The product with such ID is not found.");
             _productRepository.DeleteProduct(productId);
+        }
+
+        public void Validate(Product product)
+        {
+            var result = _validator.Validate(product);
+            if (result.IsValid) return;
+            throw new ValidationException($"Validation error: {result}");
         }
     }
 }

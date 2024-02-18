@@ -1,8 +1,5 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 using WebStore.Data;
-using WebStore.Exceptions;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
 
@@ -11,25 +8,22 @@ namespace WebStore.Repositories.Implementations
     public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;
-        private readonly IJwtProvider _jwtProvider;
 
-        public UserRepository(DataContext context, IJwtProvider jwtProvider)
+        public UserRepository(DataContext context)
         {
             _context = context;
-            _jwtProvider = jwtProvider;
         }
 
-        public bool IsUserExists(string login, string password)
+        public bool IsUserExistsAndValid(string login, string password)
         {
-            return _context.Users.Any(user =>
+            return _context.Users.AsNoTracking().Any(user =>
                 user.Login == login && user.Password == password);
         }
 
-        public string CreateToken(User inputUser)
+        public bool IsUserAlreadyExists(string login)
         {
-            return _jwtProvider.GenerateToken();
+            return _context.Users.AsNoTracking().Any(user => user.Login == login);
         }
-
         public User Register(User user)
         {
             _context.Users.Add(user);

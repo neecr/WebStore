@@ -1,12 +1,12 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using WebStore.Data;
-using WebStore.Models;
 using WebStore.Repositories.Implementations;
 using WebStore.Repositories.Interfaces;
 using WebStore.Services.Implementations;
@@ -39,6 +39,14 @@ namespace WebStore
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<CategoryValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CustomerValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<OrderValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<OrderProductValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ProductValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<UserValidator>();
+            
             
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

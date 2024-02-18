@@ -12,5 +12,6 @@ namespace WebStore.Services.Interfaces
         Product CreateProduct(ProductRequestDto product);
         Product UpdateProduct(int productId, ProductUpdateDto product);
         void DeleteProduct(int productId);
+        public void Validate(Product product);
     }
 }

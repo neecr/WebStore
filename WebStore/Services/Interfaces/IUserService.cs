@@ -7,6 +7,7 @@ namespace WebStore.Services.Interfaces
     {
         public string CreateToken(UserRequestDto user);
         public User Register(UserRequestDto user);
+        public void Validate(User user);
     }
 }
 

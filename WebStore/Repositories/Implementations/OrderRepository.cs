@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WebStore.Data;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
@@ -15,13 +16,13 @@ namespace WebStore.Repositories.Implementations
 
         public List<Order> GetOrders()
         {
-            return _context.Orders.OrderBy(o => o.OrderId).ToList();
+            return _context.Orders.AsNoTracking().OrderBy(o => o.OrderId).ToList();
         }
 
         public List<Order> GetCustomerOrders(int customerId)
         {
             var orders = _context.Orders.Where(o => o.CustomerId == customerId).
-                OrderBy(o => o.OrderId).ToList();
+                OrderBy(o => o.OrderId).AsNoTracking().ToList();
             return orders;
         }
 
@@ -54,7 +55,7 @@ namespace WebStore.Repositories.Implementations
 
         public bool IsOrderExists(int orderId)
         {
-            return _context.Orders.Any(o => o.OrderId == orderId);
+            return _context.Orders.AsNoTracking().Any(o => o.OrderId == orderId);
         }
     }
 }

@@ -11,5 +11,6 @@ namespace WebStore.Services.Interfaces
         public OrderProduct CreateOrderProduct(OrderProductRequestDto orderProductRequestDto);
         public OrderProduct UpdateOrderProduct(int orderProductId, OrderProductUpdateDto orderProductUpdateDto);
         public void DeleteOrderProduct(int orderProductId);
+        public void Validate(OrderProduct orderProduct);
     }
 }

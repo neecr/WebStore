@@ -1,4 +1,5 @@
-﻿using WebStore.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using WebStore.Data;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
 
@@ -15,7 +16,7 @@ namespace WebStore.Repositories.Implementations
 
         public List<Product> GetProducts()
         {
-            return _context.Products.OrderBy(p => p.ProductId).ToList();
+            return _context.Products.AsNoTracking().OrderBy(p => p.ProductId).ToList();
         }
 
         public Product GetProductById(int productId)
@@ -29,7 +30,7 @@ namespace WebStore.Repositories.Implementations
                     Name = p.Name,
                     Price = p.Price,
                     Category = c
-                }).FirstOrDefault();
+                }).AsNoTracking().FirstOrDefault();
 
             return product!;
         }

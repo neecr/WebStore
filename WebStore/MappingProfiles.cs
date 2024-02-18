@@ -40,6 +40,10 @@ namespace WebStore
             CreateMap<User, UserRequestDto>();
             CreateMap<UserRequestDto, User>();
 
+            CreateMap<CustomerRequestDto, Customer>();
+            CreateMap<CustomerUpdateDto, Customer>();
+            CreateMap<Customer, CustomerDto>();
+
             CreateMap<ProductByIdDto, Product>();
             
             CreateMap<Category, CategoryDto>();

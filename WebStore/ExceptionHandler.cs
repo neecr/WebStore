@@ -1,4 +1,5 @@
 using System.Net;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebStore.Exceptions;
@@ -46,6 +47,7 @@ namespace WebStore
             DbUpdateException => HttpStatusCode.InternalServerError,
             NotFoundException => HttpStatusCode.NotFound,
             WrongCredentialsException => HttpStatusCode.Unauthorized,
+            ValidationException => HttpStatusCode.Forbidden,
             _ => HttpStatusCode.InternalServerError,
         };
     }

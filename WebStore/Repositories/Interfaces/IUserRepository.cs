@@ -4,8 +4,8 @@ namespace WebStore.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        public bool IsUserExists(string login, string password);
-        public string CreateToken(User user);
+        public bool IsUserExistsAndValid(string login, string password);
+        public bool IsUserAlreadyExists(string login);
         public User Register(User user);
     }
 }

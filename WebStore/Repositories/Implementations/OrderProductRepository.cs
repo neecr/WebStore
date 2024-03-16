@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using WebStore.Data;
-using WebStore.Dto;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
 
@@ -20,21 +19,17 @@ namespace WebStore.Repositories.Implementations
             return (from op in _context.OrderProduct
                 join p in _context.Products on op.ProductId equals p.ProductId
                 join o in _context.Orders on op.OrderId equals o.OrderId
-                join c in _context.Customers on o.CustomerId equals c.CustomerId
                 where op.OrderId == orderId
                 select new OrderProduct
                 {
                     Product = p,
                     Count = op.Count,
                     Order = o
-                }).ToList();
+                }).AsNoTracking().ToList();
         }
 
-        public OrderProduct CreateOrderProduct(int productId, int orderId, OrderProduct orderProduct)
+        public OrderProduct CreateOrderProduct(OrderProduct orderProduct)
         {
-            orderProduct.ProductId = productId;
-            orderProduct.OrderId = orderId;
-
             _context.OrderProduct.Add(orderProduct);
             _context.SaveChanges();
             return orderProduct;
@@ -42,8 +37,7 @@ namespace WebStore.Repositories.Implementations
 
         public OrderProduct UpdateOrderProduct(int orderProductId, OrderProduct orderProduct)
         {
-            var existingOrderProduct = _context.OrderProduct.Find(orderProductId);
-            if (existingOrderProduct == null) return null;
+            var existingOrderProduct = _context.OrderProduct.Find(orderProductId)!;
 
             existingOrderProduct.Count = orderProduct.Count;
             existingOrderProduct.OrderId = orderProduct.OrderId;
@@ -52,6 +46,18 @@ namespace WebStore.Repositories.Implementations
             _context.SaveChanges();
 
             return existingOrderProduct;
+        }
+
+        public void DeleteOrderProduct(int orderProductId)
+        {
+            var existingOrderProduct = _context.OrderProduct.Find(orderProductId);
+
+            _context.OrderProduct.Remove(existingOrderProduct!);
+            _context.SaveChanges();
+        }
+        public bool IsOrderProductExists(int orderProductId)
+        {
+            return _context.OrderProduct.AsNoTracking().Any(op => op.OrderProductId == orderProductId);
         }
     }
 }

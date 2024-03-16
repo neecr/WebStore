@@ -12,6 +12,7 @@ namespace WebStore.Services.Interfaces
         public List<CategoryDto> GetCategories();
         public Category CreateCategory(CategoryRequestDto categoryRequestDto);
         public Category UpdateCategory(int categoryId, CategoryUpdateDto categoryUpdateDto);
-        public bool IsCategoryExists(int categoryId);
+        public void DeleteCategory(int categoryId);
+        public void Validate(Category category);
     }
 }

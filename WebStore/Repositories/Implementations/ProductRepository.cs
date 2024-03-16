@@ -1,4 +1,5 @@
-﻿using WebStore.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using WebStore.Data;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
 
@@ -15,12 +16,12 @@ namespace WebStore.Repositories.Implementations
 
         public List<Product> GetProducts()
         {
-            return _context.Products.OrderBy(p => p.ProductId).ToList();
+            return _context.Products.AsNoTracking().OrderBy(p => p.ProductId).ToList();
         }
 
         public Product GetProductById(int productId)
         {
-            return (from p in _context.Products
+            var product = (from p in _context.Products
                 join c in _context.Categories on p.CategoryId equals c.CategoryId
                 where p.ProductId == productId
                 select new Product
@@ -29,19 +30,20 @@ namespace WebStore.Repositories.Implementations
                     Name = p.Name,
                     Price = p.Price,
                     Category = c
-                }).FirstOrDefault()!;
+                }).AsNoTracking().FirstOrDefault();
+
+            return product!;
         }
-        public void CreateProduct(int categoryId, Product product)
+
+        public void CreateProduct(Product product)
         {
-            product.CategoryId = categoryId;
             _context.Products.Add(product);
             _context.SaveChanges();
         }
 
         public Product UpdateProduct(int productId, Product product)
         {
-            var existingProduct = _context.Products.Find(productId);
-            if (existingProduct == null) return null;
+            var existingProduct = _context.Products.Find(productId)!;
             
             existingProduct.Name = product.Name;
             existingProduct.Price = product.Price;
@@ -50,6 +52,13 @@ namespace WebStore.Repositories.Implementations
             _context.SaveChanges();
 
             return existingProduct;
+        }
+
+        public void DeleteProduct(int productId)
+        {
+            var existingProduct = _context.Products.Find(productId)!;
+            _context.Products.Remove(existingProduct);
+            _context.SaveChanges();
         }
 
         public bool IsProductExists(int productId)

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WebStore.Data;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
@@ -15,17 +16,18 @@ namespace WebStore.Repositories.Implementations
 
         public Category GetCategoryById(int caterogyId)
         {
-            return _context.Categories.FirstOrDefault(c => c.CategoryId == caterogyId)!;
+            return _context.Categories.AsNoTracking().FirstOrDefault(c => c.CategoryId == caterogyId)!;
         }
 
         public List<Product> GetProductsByCategory(string categoryName)
         {
-            return _context.Products.Where(p => p.Category.Name == categoryName).OrderBy(p => p.ProductId).ToList();
+            return _context.Products.AsNoTracking().Where(p => p.Category.Name == categoryName).
+                OrderBy(p => p.ProductId).ToList();
         }
 
         public List<Category> GetCategories()
         {
-            return _context.Categories.OrderBy(c => c.CategoryId).ToList();
+            return _context.Categories.AsNoTracking().OrderBy(c => c.CategoryId).ToList();
         }
 
         public Category CreateCategory(Category category)
@@ -37,14 +39,21 @@ namespace WebStore.Repositories.Implementations
 
         public Category UpdateCategory(int categoryId, Category category)
         {
-            var existingCategory = _context.Categories.Find(categoryId);
-            if (existingCategory == null) return null;
-            
+            var existingCategory = _context.Categories.Find(categoryId)!;
+
             existingCategory.Name = category.Name;
-            
+
             _context.SaveChanges();
 
             return existingCategory;
+        }
+
+        public void DeleteCategory(int categoryId)
+        {
+            var existingCategory = _context.Categories.Find(categoryId)!;
+            
+            _context.Categories.Remove(existingCategory);
+            _context.SaveChanges();
         }
 
         public bool IsCategoryExists(int categoryId)

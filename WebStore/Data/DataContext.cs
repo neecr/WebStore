@@ -15,6 +15,7 @@ namespace WebStore.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderProduct> OrderProduct { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +38,8 @@ namespace WebStore.Data
                 .HasMany(p => p.OrderProducts)
                 .WithOne(op => op.Product)
                 .HasForeignKey(op => op.ProductId);
+
+            modelBuilder.Entity<User>().HasKey(user => user.UserId);
         }
     }
 }

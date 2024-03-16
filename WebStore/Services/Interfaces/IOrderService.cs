@@ -9,8 +9,9 @@ namespace WebStore.Services.Interfaces
     {
         public List<OrderDto> GetOrders();
         public List<OrderDto> GetCustomerOrders(int customerId);
-        public Order CreateOrder(int customerId, OrderRequestDto orderRequestDto);
+        public Order CreateOrder(OrderRequestDto orderRequestDto);
         public Order UpdateOrder(int orderId, OrderUpdateDto orderUpdateDto);
-        public bool IsOrderExists(int orderId);
+        public void DeleteOrder(int orderId);
+        public void Validate(Order order);
     }
 }

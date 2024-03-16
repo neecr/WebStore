@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WebStore.Data;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
@@ -15,17 +16,18 @@ namespace WebStore.Repositories.Implementations
 
         public List<Order> GetOrders()
         {
-            return _context.Orders.OrderBy(o => o.OrderId).ToList();
+            return _context.Orders.AsNoTracking().OrderBy(o => o.OrderId).ToList();
         }
 
         public List<Order> GetCustomerOrders(int customerId)
         {
-            return _context.Orders.Where(o => o.CustomerId == customerId).OrderBy(o => o.OrderId).ToList();
+            var orders = _context.Orders.Where(o => o.CustomerId == customerId).
+                OrderBy(o => o.OrderId).AsNoTracking().ToList();
+            return orders;
         }
 
-        public Order CreateOrder(int customerId, Order order)
+        public Order CreateOrder(Order order)
         {
-            order.CustomerId = customerId;
             _context.Orders.Add(order);
             _context.SaveChanges();
             return order;
@@ -33,8 +35,7 @@ namespace WebStore.Repositories.Implementations
 
         public Order UpdateOrder(int orderId, Order order)
         {
-            var existingOrder = _context.Orders.Find(orderId);
-            if (existingOrder == null) return null;
+            var existingOrder = _context.Orders.Find(orderId)!;
 
             existingOrder.Date = order.Date;
             existingOrder.CustomerId = order.CustomerId;
@@ -44,9 +45,17 @@ namespace WebStore.Repositories.Implementations
             return existingOrder;
         }
 
+        public void DeleteOrder(int orderId)
+        {
+            var existingOrder = _context.Orders.Find(orderId);
+
+            _context.Orders.Remove(existingOrder!);
+            _context.SaveChanges();
+        }
+
         public bool IsOrderExists(int orderId)
         {
-            return _context.Orders.Any(o => o.OrderId == orderId);
+            return _context.Orders.AsNoTracking().Any(o => o.OrderId == orderId);
         }
     }
 }

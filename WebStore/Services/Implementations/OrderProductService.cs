@@ -1,7 +1,9 @@
 using AutoMapper;
+using FluentValidation;
 using WebStore.Dto;
 using WebStore.Dto.RequestDtos;
 using WebStore.Dto.UpdateDtos;
+using WebStore.Exceptions;
 using WebStore.Models;
 using WebStore.Repositories.Interfaces;
 using WebStore.Services.Interfaces;
@@ -10,33 +12,73 @@ namespace WebStore.Services.Implementations
 {
     public class OrderProductService : IOrderProductService
     {
-        private readonly IOrderProductRepository _repository;
+        private readonly IOrderProductRepository _orderProductRepository;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly IValidator<OrderProduct> _validator;
         private readonly IMapper _mapper;
 
 
-        public OrderProductService(IOrderProductRepository repository, IMapper mapper)
+        public OrderProductService(IOrderProductRepository orderProductRepository, IMapper mapper,
+            IOrderRepository orderRepository, IProductRepository productRepository, IValidator<OrderProduct> validator)
         {
-            _repository = repository;
+            _orderProductRepository = orderProductRepository;
             _mapper = mapper;
+            _orderRepository = orderRepository;
+            _productRepository = productRepository;
+            _validator = validator;
         }
 
         public List<OrderProductDto> GetOrderProducts(int orderId)
         {
-            return _mapper.Map<List<OrderProductDto>>(_repository.GetOrderProducts(orderId));
+            if (!_orderRepository.IsOrderExists(orderId))
+                throw new NotFoundException("The order with such ID is not found.");
+
+            return _mapper.Map<List<OrderProductDto>>(_orderProductRepository.GetOrderProducts(orderId));
         }
 
-        public OrderProduct CreateOrderProduct(int productId, int orderId, OpRequestDto opRequestDto)
+        public OrderProduct CreateOrderProduct(OrderProductRequestDto orderProductRequestDto)
         {
-            var neworderproduct = _mapper.Map<OrderProduct>(opRequestDto);
-            _repository.CreateOrderProduct(productId, orderId, neworderproduct);
-            return neworderproduct;
+            if (!_productRepository.IsProductExists(orderProductRequestDto.ProductId))
+                throw new NotFoundException("The product with such ID is not found.");
+            if (!_orderRepository.IsOrderExists(orderProductRequestDto.OrderId))
+                throw new NotFoundException("The order with such ID is not found.");
+
+            var newOrderProduct = _mapper.Map<OrderProduct>(orderProductRequestDto);
+            Validate(newOrderProduct);
+            _orderProductRepository.CreateOrderProduct(newOrderProduct);
+            return newOrderProduct;
         }
 
-        public OrderProduct UpdateOrderProduct(int orderProductId, OpUpdateDto opUpdateDto)
+        public OrderProduct UpdateOrderProduct(int orderProductId, OrderProductUpdateDto orderProductUpdateDto)
         {
-            var updateorderproduct = _mapper.Map<OrderProduct>(opUpdateDto);
-            _repository.UpdateOrderProduct(orderProductId, updateorderproduct);
-            return updateorderproduct;
+            if (!_orderProductRepository.IsOrderProductExists(orderProductId))
+                throw new NotFoundException("The pair of order and product with such ID is not found.");
+            if (!_orderRepository.IsOrderExists(orderProductUpdateDto.OrderId))
+                throw new NotFoundException("The order with such ID is not found.");
+            if (!_productRepository.IsProductExists(orderProductUpdateDto.ProductId))
+                throw new NotFoundException("The product with such ID is not found.");
+
+            var updatedOrderProduct = _mapper.Map<OrderProduct>(orderProductUpdateDto);
+            Validate(updatedOrderProduct);
+            _orderProductRepository.UpdateOrderProduct(orderProductId, updatedOrderProduct);
+            updatedOrderProduct.OrderProductId = orderProductId;
+            return updatedOrderProduct;
+        }
+
+        public void DeleteOrderProduct(int orderProductId)
+        {
+            if (!_orderProductRepository.IsOrderProductExists(orderProductId))
+                throw new NotFoundException("The pair of order and product with such ID is not found.");
+
+            _orderProductRepository.DeleteOrderProduct(orderProductId);
+        }
+
+        public void Validate(OrderProduct orderProduct)
+        {
+            var result = _validator.Validate(orderProduct);
+            if (result.IsValid) return;
+            throw new ValidationException($"Validation error: {result}");
         }
     }
 }
